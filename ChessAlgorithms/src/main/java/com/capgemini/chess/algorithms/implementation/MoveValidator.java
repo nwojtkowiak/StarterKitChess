@@ -49,7 +49,7 @@ public class MoveValidator {
 		if (!(validateCoordinate(this.from) && validateCoordinate(this.to))) {
 			throw new InvalidMoveException();
 		}
-		
+
 	}
 
 	public MoveType validateMovePiece() throws InvalidMoveException {
@@ -57,8 +57,9 @@ public class MoveValidator {
 		MoveType moveType = null;
 
 		if (pieceType.equals(PieceType.PAWN)) {
-			return validateMovePawn();
-
+			moveType = validateMovePawn();
+		} else if (pieceType.equals(PieceType.ROOK)) {
+			moveType = validateMoveRook();
 		}
 
 		return moveType;
@@ -66,7 +67,8 @@ public class MoveValidator {
 
 	public MoveType validateMovePawn() throws InvalidMoveException {
 		Color colorFrom = this.pieceFrom.getColor();
-		//PieceType pieceToType = this.pieceTo != null ? this.pieceTo.getType() : null;
+		// PieceType pieceToType = this.pieceTo != null ? this.pieceTo.getType()
+		// : null;
 		Color colorTo;
 		int startY;
 		int multiply;
@@ -94,7 +96,7 @@ public class MoveValidator {
 				}
 				throw new InvalidMoveException();
 			}
-		// when destination field is not empty
+			// when destination field is not empty
 		} else {
 			colorTo = this.pieceTo.getColor();
 			if ((this.from.getX() - 1 == this.to.getX()) || (this.from.getX() + 1 == this.to.getX())) {
@@ -108,6 +110,26 @@ public class MoveValidator {
 							return MoveType.CAPTURE;
 						}
 					}
+				}
+			}
+
+		}
+		throw new InvalidMoveException();
+	}
+
+	public MoveType validateMoveRook() throws InvalidMoveException {
+
+		Color colorFrom = this.pieceFrom.getColor();
+
+		if (this.pieceTo == null) {
+			if ((this.from.getX() == this.to.getX()) || (this.from.getY() == this.to.getY())) {
+				return MoveType.ATTACK;
+			}
+			// when destination field is not empty
+		} else {
+			if (!colorFrom.equals(this.pieceTo.getColor())) {
+				if ((this.from.getX() == this.to.getX()) || (this.from.getY() == this.to.getY())) {
+					return MoveType.CAPTURE;
 				}
 			}
 
