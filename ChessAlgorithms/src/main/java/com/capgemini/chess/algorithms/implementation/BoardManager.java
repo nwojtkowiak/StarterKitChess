@@ -234,7 +234,14 @@ public class BoardManager {
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
 
 		// TODO please add implementation here
-		return null;
+		MoveValidator moveValidator = new MoveValidator(from, to);
+		
+		Piece pieceFrom = this.board.getPieceAt(from);
+		Piece pieceTo = this.board.getPieceAt(to);
+		moveValidator.setPieces(pieceFrom, pieceTo);
+		
+		return moveValidator.checkAllValidations();
+		
 	}
 
 	private boolean isKingInCheck(Color kingColor) {

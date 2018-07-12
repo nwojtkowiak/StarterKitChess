@@ -7,8 +7,8 @@ package com.capgemini.chess.algorithms.data.enums;
  *
  */
 public enum MoveType {
-	ATTACK,
-	CAPTURE,
+	ATTACK, //zwykly ruch
+	CAPTURE, //bicie
 	CASTLING,
 	EN_PASSANT;
 }
