@@ -29,7 +29,7 @@ public class MoveValidator {
 	public Move checkAllValidations() throws InvalidMoveException {
 		Move move = new Move(from, to);
 
-		validateRangeOfIndex();
+		//validateRangeOfIndex();
 
 		move.setType(validateMovePiece());
 		move.setMovedPiece(pieceFrom);
@@ -60,10 +60,15 @@ public class MoveValidator {
 			moveType = validateMovePawn();
 		} else if (pieceType.equals(PieceType.ROOK)) {
 			moveType = validateMoveRook();
+		} else if (pieceType.equals(PieceType.BISHOP)){
+			moveType = validateMoveBishop();
+		} else if (pieceType.equals(PieceType.QUEEN)){
+			moveType = validateMoveQueen();
 		}
 
 		return moveType;
 	}
+	
 
 	public MoveType validateMovePawn() throws InvalidMoveException {
 		Color colorFrom = this.pieceFrom.getColor();
@@ -117,10 +122,9 @@ public class MoveValidator {
 		throw new InvalidMoveException();
 	}
 
-	public MoveType validateMoveRook() throws InvalidMoveException {
-
+	public MoveType conditionsForRook(){
 		Color colorFrom = this.pieceFrom.getColor();
-
+	
 		if (this.pieceTo == null) {
 			if ((this.from.getX() == this.to.getX()) || (this.from.getY() == this.to.getY())) {
 				return MoveType.ATTACK;
@@ -134,6 +138,79 @@ public class MoveValidator {
 			}
 
 		}
+		
+		return null;
+	}
+	
+	public MoveType validateMoveRook() throws InvalidMoveException {
+		MoveType moveType = conditionsForRook();
+		
+		if(moveType != null){
+			return moveType;
+		}
+		
+		throw new InvalidMoveException();
+	}
+	
+	public MoveType conditionsForBishop(){
+		Color colorFrom = this.pieceFrom.getColor();
+		int xFrom = this.from.getX();
+		int xTo = this.to.getX();
+		int yFrom = this.from.getY();
+		int yTo = this.to.getY();
+		
+		if(this.pieceTo == null){
+			
+			if(( xTo < xFrom  && yTo < yFrom) || ( xTo > xFrom  && yTo > yFrom)){
+				
+				if( xTo - yTo == xFrom - yFrom){
+					return MoveType.ATTACK;
+				}
+			}
+			if(( xTo < xFrom  && yTo > yFrom) || ( xTo > xFrom  && yTo < yFrom)){
+				
+				if( xTo + yTo == xFrom + yFrom){
+					return MoveType.ATTACK;
+				}
+			}
+		}else if(!colorFrom.equals(this.pieceTo.getColor())){
+			
+			if(( xTo < xFrom  && yTo < yFrom) || ( xTo > xFrom  && yTo > yFrom)){
+				
+				if( xTo - yTo == xFrom - yFrom){
+					return MoveType.CAPTURE;
+				}
+			}
+			if(( xTo < xFrom  && yTo > yFrom) || ( xTo > xFrom  && yTo < yFrom)){
+				
+				if( xTo + yTo == xFrom + yFrom){
+					return MoveType.CAPTURE;
+				}
+			}
+			
+		}
+		
+		return null;
+	}
+	
+	
+	public MoveType validateMoveBishop() throws InvalidMoveException{
+		MoveType moveType = conditionsForBishop();
+		if(moveType != null){
+			return moveType;
+		}
+		
+		throw new InvalidMoveException();
+	}
+	
+	public MoveType validateMoveQueen() throws InvalidMoveException{
+		MoveType moveType = conditionsForBishop();
+		moveType = moveType!=null ? moveType : conditionsForRook();
+		
+		if(moveType != null){
+			return moveType;
+		}
+		
 		throw new InvalidMoveException();
 	}
 }
