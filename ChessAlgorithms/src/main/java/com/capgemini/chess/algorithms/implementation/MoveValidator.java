@@ -58,7 +58,7 @@ public class MoveValidator {
 
 	public void validateRangeOfIndex() throws InvalidMoveException {
 		
-		if (!(validateCoordinate(this.from) && validateCoordinate(this.to))) {
+		if (!(validateCoordinate(from) && validateCoordinate(to))) {
 			throw new InvalidMoveException();
 		}
 
@@ -68,28 +68,35 @@ public class MoveValidator {
 
 		MoveType moveType = checkMoveType();
 		
-		Move move = new Move(this.from, this.to);
+		Move move = new Move(from, to);
 		
-		move.setMovedPiece(this.pieceFrom);
+		move.setMovedPiece(pieceFrom);
 		move.setFrom(from);
 		move.setTo(to);
 		move.setType(moveType);
 		
 		PiecesFactory factory = new PiecesFactory();
-		factory.checkPath(move, this.board);
+		
+		if(!factory.checkPath(move, board)){
+			throw new InvalidMoveException();
+		}
 
 		return move;
 	}
 	
 	public MoveType checkMoveType() throws InvalidMoveException{
 		
-		Color color = this.pieceFrom.getColor();
+		if(pieceFrom == null){
+			throw new InvalidMoveException();
+		}
+		
+		Color color = pieceFrom.getColor();
 		
 		if(!color.equals(nextColor)){
 			throw new InvalidMoveException(); //nie moja figura
 		}
 		
-		if(this.pieceTo == null){
+		if(pieceTo == null){
 			
 			return MoveType.ATTACK;
 			
@@ -103,6 +110,7 @@ public class MoveValidator {
 			}
 				
 		}
+		
 		throw new InvalidMoveException();
 		
 	}

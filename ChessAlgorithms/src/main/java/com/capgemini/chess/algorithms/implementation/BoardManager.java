@@ -13,6 +13,7 @@ import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 import com.capgemini.chess.algorithms.implementation.exceptions.KingInCheckException;
+import com.capgemini.chess.algorithms.piecesValidators.KingMoveValidator;
 
 /**
  * Class for managing of basic operations on the Chess Board.
@@ -231,25 +232,47 @@ public class BoardManager {
 		this.board.setPieceAt(null, lastMove.getTo());
 	}
 
+	private void setStateBoard(Piece pieceFrom, Coordinate from, Piece pieceTo, Coordinate to){
+		board.setPieceAt(pieceFrom, from);
+		board.setPieceAt(pieceTo, to);
+	}
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
 
-		// TODO please add implementation here
 		Color nextColor = calculateNextMoveColor();
 		MoveValidator moveValidator = new MoveValidator(from, to, nextColor);
 		
 		Piece pieceFrom = this.board.getPieceAt(from);
 		Piece pieceTo = this.board.getPieceAt(to);
+		
+		
 		moveValidator.setPieces(pieceFrom, pieceTo);
 		moveValidator.setBoard(board);
 		
-		return moveValidator.checkAllValidations();
+		Move move = moveValidator.checkAllValidations();
+		boolean resultInCheck = false;
+		
+		if( move != null){
+			setStateBoard(null, from, pieceFrom, to);
+			
+			resultInCheck = isKingInCheck(nextColor);
+			
+			setStateBoard(pieceFrom, from, pieceTo, to);
+				
+			
+		}
+		
+	 	if(resultInCheck){
+	 		throw new KingInCheckException();
+	 	}
+		
+		return move;
 		
 	}
 
 	private boolean isKingInCheck(Color kingColor) {
-
-		// TODO please add implementation here
-		return false;
+		KingMoveValidator king = new KingMoveValidator(kingColor);
+		king.setBoard(board);
+		return king.isCheck();
 	}
 
 	private boolean isAnyMoveValid(Color nextMoveColor) {

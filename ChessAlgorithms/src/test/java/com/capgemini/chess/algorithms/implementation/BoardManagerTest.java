@@ -24,6 +24,7 @@ import com.capgemini.chess.algorithms.implementation.exceptions.KingInCheckExcep
  */
 public class BoardManagerTest {
 
+	//OK
 	@Test
 	public void testGenerateBoardInitialPosition() {
 		// given
@@ -52,6 +53,7 @@ public class BoardManagerTest {
 		assertEquals(32, calculateNumberOfPieces(boardManager.getBoard()));
 	}
 	
+	//OK
 	@Test
 	public void testGenerateBoardAttack() {
 		// given
@@ -71,6 +73,7 @@ public class BoardManagerTest {
 		assertEquals(32, calculateNumberOfPieces(boardManager.getBoard()));
 	}
 	
+	//OK
 	@Test
 	public void testGenerateBoardCapture() {
 		// given
@@ -90,6 +93,7 @@ public class BoardManagerTest {
 		assertEquals(31, calculateNumberOfPieces(boardManager.getBoard()));
 	}
 	
+	//OK
 	@Test
 	public void testGenerateBoardCastling() {
 		// given
@@ -110,6 +114,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.WHITE_ROOK, boardManager.getBoard().getPieceAt(new Coordinate(3, 0)));
 	}
 	
+	//OK
 	@Test
 	public void testGenerateBoardEnPassant() {
 		// given
@@ -141,6 +146,7 @@ public class BoardManagerTest {
 		assertEquals(31, calculateNumberOfPieces(boardManager.getBoard()));
 	}
 	
+	//OK
 	@Test
 	public void testGenerateBoardPromotion() {
 		// given
@@ -158,6 +164,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.BLACK_QUEEN, boardManager.getBoard().getPieceAt(new Coordinate(1, 0)));
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveBishopAttack() throws InvalidMoveException {
 		// given
@@ -173,6 +180,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.WHITE_BISHOP, move.getMovedPiece());
 	}
 	
+	//OK
 	@Test
 	public void testPerformMovePawnAttack() throws InvalidMoveException {
 		// given
@@ -189,6 +197,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.BLACK_PAWN, move.getMovedPiece());
 	}
 
+	//OK
 	@Test
 	public void testPerformMoveKingAttack() throws InvalidMoveException {
 		// given
@@ -204,6 +213,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.WHITE_KING, move.getMovedPiece());
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveKnightCapture() throws InvalidMoveException {
 		// given
@@ -221,6 +231,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.BLACK_KNIGHT, move.getMovedPiece());
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveQueenCapture() throws InvalidMoveException {
 		// given
@@ -237,6 +248,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.WHITE_QUEEN, move.getMovedPiece());
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveRookCapture() throws InvalidMoveException {
 		// given
@@ -289,6 +301,7 @@ public class BoardManagerTest {
 		assertEquals(Piece.WHITE_PAWN, move.getMovedPiece());
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidIndexOutOfBound() {
 		// given
@@ -306,6 +319,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//zwraca nullPointerException bo nie jest zaimplementowana validateMove
 	@Test
 	public void testPerformMoveInvalidMoveOrder() {
 		// given
@@ -343,6 +357,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidSameSpot() {
 		// given
@@ -363,6 +378,7 @@ public class BoardManagerTest {
 	}
 	
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidPawnBackwardMove() {
 		// given
@@ -382,6 +398,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidPawnAttackDestination() {
 		// given
@@ -401,6 +418,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidPawnAttackDistance() {
 		// given
@@ -419,7 +437,8 @@ public class BoardManagerTest {
 		// then 
 		assertTrue(exceptionThrown);
 	}
-	
+
+	//OK
 	@Test
 	public void testPerformMoveInvalidPawnCaptureDestination() {
 		// given
@@ -440,6 +459,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidKingDistance() {
 		// given
@@ -459,6 +479,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidKnightDestination() {
 		// given
@@ -478,6 +499,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidBishopDestination() {
 		// given
@@ -497,6 +519,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidQueenLeapsOver() {
 		// given
@@ -517,6 +540,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidRookLeapsOver() {
 		// given
@@ -537,6 +561,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidOwnPieceCapture() {
 		// given
@@ -582,6 +607,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//?
 	@Test
 	public void testPerformMoveInvalidCastlingWithPiecesBetween() {
 		// given
@@ -603,6 +629,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//OK
 	@Test
 	public void testPerformMoveInvalidCastlingKingUnderCheck() {
 		// given
@@ -624,6 +651,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
+	//spr czy ruch figury spowodowal szach
 	@Test
 	public void testPerformMoveInvalidKingWouldBeChecked() {
 		// given
@@ -636,7 +664,8 @@ public class BoardManagerTest {
 		BoardManager boardManager = new BoardManager(board);
 		boolean exceptionThrown = false;
 		try {
-			boardManager.performMove(new Coordinate(4, 5), new Coordinate(7, 2));
+			//bishop moveConditions zwraca false
+			boardManager.performMove(new Coordinate(4, 5), new Coordinate(3, 2));
 		} catch (InvalidMoveException e) {
 			exceptionThrown = e instanceof KingInCheckException;
 		}
@@ -673,6 +702,7 @@ public class BoardManagerTest {
 		assertEquals(BoardState.CHECK, boardState);
 	}
 	
+	//OK
 	@Test
 	public void testUpdateBoardStateCheckMate() throws InvalidMoveException {
 		// given
@@ -690,6 +720,8 @@ public class BoardManagerTest {
 		assertEquals(BoardState.CHECK_MATE, boardState);
 	}
 	
+	
+	//OK
 	@Test
 	public void testUpdateBoardStateStaleMate() throws InvalidMoveException {
 		// given
@@ -707,6 +739,7 @@ public class BoardManagerTest {
 		assertEquals(BoardState.STALE_MATE, boardState);
 	}
 	
+	//OK
 	@Test
 	public void testCheckThreefoldRepetitionRuleSuccessful() {
 		// given
@@ -745,6 +778,7 @@ public class BoardManagerTest {
 		assertTrue(isThreefoldRepetition);
 	}
 	
+	//OK
 	@Test
 	public void testCheckThreefoldRepetitionRuleUnsuccessful() {
 		// given
@@ -781,6 +815,7 @@ public class BoardManagerTest {
 		assertFalse(isThreefoldRepetition);
 	}
 	
+	//OK
 	@Test
 	public void testCheckFiftyMoveRuleSuccessful() {
 		// given
@@ -797,6 +832,7 @@ public class BoardManagerTest {
 		assertTrue(areFiftyMoves);
 	}
 	
+	//OK
 	@Test
 	public void testCheckFiftyMoveRuleUnsuccessfulNotEnoughMoves() {
 		// given
@@ -813,6 +849,7 @@ public class BoardManagerTest {
 		assertFalse(areFiftyMoves);
 	}
 	
+	//OK
 	@Test
 	public void testCheckFiftyMoveRuleUnsuccessfulPawnMoved() {
 		// given
