@@ -7,29 +7,21 @@ import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
-import com.capgemini.chess.algorithms.data.patterns.PiecesFactory;
+import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.pieces.interfaces.PiecesMoveValidatorInterface;
+import com.capgemini.chess.algorithms.pieces.interfaces.MoveValidatorInterface;
 
-public class KingMoveValidator implements PiecesMoveValidatorInterface {
+public class KingMoveValidator extends PieceMoveValidator {
 
-	private int xFrom;
-	private int yFrom;
-	private int xTo;
-	private int yTo;
-	
 	private Board board;
 	private Color color;
 
-	public KingMoveValidator(Move move) {
-		this.xFrom = move.getFrom().getX();
-		this.yFrom = move.getFrom().getY();
-		this.xTo = move.getTo().getX();
-		this.yTo = move.getTo().getY();
-	}
-
 	public KingMoveValidator(Color color) {
 		this.color = color;
+	}
+
+	public KingMoveValidator(Move move) {
+		super(move.getFrom().getX(), move.getFrom().getY(), move.getTo().getX(), move.getTo().getY());
 	}
 
 	public void setBoard(Board board) {
@@ -73,7 +65,7 @@ public class KingMoveValidator implements PiecesMoveValidatorInterface {
 
 		Coordinate kingCoordinate = whereIs();
 		Coordinate coordinate;
-		PiecesFactory pieceFactory = new PiecesFactory();
+		PiecesMoveFactory pieceFactory = new PiecesMoveFactory();
 		Move move = new Move();
 		Piece piece;
 		boolean result = false;
@@ -108,6 +100,5 @@ public class KingMoveValidator implements PiecesMoveValidatorInterface {
 		}
 		return result;
 	}
-
 
 }

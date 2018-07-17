@@ -13,7 +13,7 @@ import com.capgemini.chess.algorithms.piecesValidators.PawnMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.QueenMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.RookMoveValidator;
 
-public class PiecesFactory {
+public class PiecesMoveFactory {
 
 	public boolean checkPath(Move move, Board board) throws InvalidMoveException {
 		PieceType pieceType = move.getMovedPiece().getType();

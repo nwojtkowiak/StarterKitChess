@@ -1,21 +1,12 @@
 package com.capgemini.chess.algorithms.piecesValidators;
 
-import com.capgemini.chess.algorithms.data.Coordinate;
+
 import com.capgemini.chess.algorithms.data.Move;
-import com.capgemini.chess.algorithms.pieces.interfaces.PiecesMoveValidatorInterface;
 
-public class KinghtMoveValidator implements PiecesMoveValidatorInterface{
-
-	private int xFrom;
-	private int yFrom;
-	private int xTo;
-	private int yTo;
+public class KinghtMoveValidator extends PieceMoveValidator{
 
 	public KinghtMoveValidator(Move move) {
-		this.xFrom = move.getFrom().getX();
-		this.yFrom = move.getFrom().getY();
-		this.xTo = move.getTo().getX();
-		this.yTo = move.getTo().getY();
+		super(move.getFrom().getX(), move.getFrom().getY(), move.getTo().getX(), move.getTo().getY());
 	}
 	
 	@Override
@@ -32,7 +23,7 @@ public class KinghtMoveValidator implements PiecesMoveValidatorInterface{
 		}
 		return false;
 	}
-	
-	
+
+
 
 }

@@ -6,29 +6,20 @@ import com.capgemini.chess.algorithms.data.enums.Color;
 import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.pieces.interfaces.PiecesMoveValidatorInterface;
+import com.capgemini.chess.algorithms.pieces.interfaces.MoveValidatorInterface;
 
-public class PawnMoveValidator implements PiecesMoveValidatorInterface {
+public class PawnMoveValidator extends PieceMoveValidator {
 
-	private int xFrom;
-	private int yFrom;
-	private int xTo;
-	private int yTo;
 	private int startY = 1;
 	private int factor = 1;
 	
 	private Color color;
 	MoveType moveType;
-	private Board board;
 
 	public PawnMoveValidator(Move move, Board board) {
-		this.xFrom = move.getFrom().getX();
-		this.yFrom = move.getFrom().getY();
-		this.xTo = move.getTo().getX();
-		this.yTo = move.getTo().getY();
+		super(move.getFrom().getX(),move.getFrom().getY(), move.getTo().getX(),move.getTo().getY(), board);
 		this.moveType = move.getType();
 		this.color = move.getMovedPiece().getColor();
-		this.board = board;
 	}
 
 	public boolean isAllPathFree(){

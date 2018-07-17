@@ -7,7 +7,7 @@ import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
-import com.capgemini.chess.algorithms.data.patterns.PiecesFactory;
+import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
 public class MoveValidator {
@@ -75,7 +75,7 @@ public class MoveValidator {
 		move.setTo(to);
 		move.setType(moveType);
 		
-		PiecesFactory factory = new PiecesFactory();
+		PiecesMoveFactory factory = new PiecesMoveFactory();
 		
 		if(!factory.checkPath(move, board)){
 			throw new InvalidMoveException();
