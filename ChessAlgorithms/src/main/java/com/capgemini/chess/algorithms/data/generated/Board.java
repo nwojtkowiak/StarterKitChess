@@ -42,6 +42,11 @@ public class Board {
 		this.state = state;
 	}
 	
+	public void setStateBoard(Piece pieceFrom, Coordinate from, Piece pieceTo, Coordinate to){
+		this.setPieceAt(pieceFrom, from);
+		this.setPieceAt(pieceTo, to);
+	}
+	
 	/**
 	 * Sets chess piece on board based on given coordinates
 	 * 

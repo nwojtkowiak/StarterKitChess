@@ -4,42 +4,53 @@ import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.enums.Color;
 import com.capgemini.chess.algorithms.data.enums.MoveType;
+import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
-import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.pieces.interfaces.MoveValidatorInterface;
 
 public class PawnMoveValidator extends PieceMoveValidator {
 
 	private int startY = 1;
 	private int factor = 1;
 	
-	private Color color;
-	MoveType moveType;
+	private MoveType moveType;
+
+	public PawnMoveValidator() {
+
+	}
+
+	public void setBoard(Board board){
+		this.board = board;
+	}
+	
 
 	public PawnMoveValidator(Move move, Board board) {
-		super(move.getFrom().getX(),move.getFrom().getY(), move.getTo().getX(),move.getTo().getY(), board);
+		// this.moveType = move.getType();
 		this.moveType = move.getType();
 		this.color = move.getMovedPiece().getColor();
 	}
 
-	public boolean isAllPathFree(){
-		
+	public boolean isAllPathFree(int xFrom, int yFrom, Board board) {
+
 		Coordinate coordinate = new Coordinate(xFrom + factor, yFrom);
-		
-		if(board.getPieceAt(coordinate) != null){
+
+		if (board.getPieceAt(coordinate) != null) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	private boolean moveConditionsWhenAttack(int startY, int factor) {
 
+	private boolean moveConditionsWhenAttack(Move move, int startY, int factor, Board board) {
+		int xFrom = move.getFrom().getX();
+		int yFrom = move.getFrom().getY();
+		int xTo = move.getTo().getX();
+		int yTo = move.getTo().getY();
+		
 		if (xFrom == xTo) {
 			if (yFrom == startY) {
-				if (yFrom + 2 * factor == yTo){ 
-					return isAllPathFree();
-				}else if(yFrom + 1 * factor == yTo) {
+				if (yFrom + 2 * factor == yTo) {
+					return isAllPathFree(xFrom, yFrom, board);
+				} else if (yFrom + 1 * factor == yTo) {
 					return true;
 				}
 			} else {
@@ -52,9 +63,37 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		return false;
 	}
 
-	private boolean moveConditionsWhenCapture(int startY, int factor) {
+	private MoveType checkEnPassant(Board board, MoveType moveType) {
+		int sizeHistory = board.getMoveHistory().size();
+		Move lastMove;
+				
+		if (sizeHistory > 0) {
+			lastMove = board.getMoveHistory().get(sizeHistory - 1);
+		} else {
+			return moveType;
+		}
 
-		if ((xFrom- 1 == xTo) || (xFrom + 1 == xTo)) {
+		Coordinate from = lastMove.getFrom();
+		Coordinate to = lastMove.getTo();
+
+		if (lastMove.getMovedPiece().getType() == PieceType.PAWN) {
+
+			if (from.getY() + 2 == to.getY() || from.getY() - 2 == to.getY()) {
+				return MoveType.EN_PASSANT;
+			}
+		}
+
+		return moveType;
+	}
+
+	private boolean moveConditionsWhenCapture(Move move, int startY, int factor) {
+		
+		int xFrom = move.getFrom().getX();
+		int yFrom = move.getFrom().getY();
+		int xTo = move.getTo().getX();
+		int yTo = move.getTo().getY();
+
+		if ((xFrom - 1 == xTo) || (xFrom + 1 == xTo)) {
 
 			if (yFrom + 1 * factor == yTo) {
 				return true;
@@ -66,21 +105,36 @@ public class PawnMoveValidator extends PieceMoveValidator {
 	}
 
 	@Override
-	public boolean moveConditions() {
-		if (color.equals(Color.BLACK)) {
+	public boolean moveConditions(Move move, Board board) {
+		Color color = move.getMovedPiece().getColor();
+		MoveType moveType = move.getType();
+		
+		if (color == Color.BLACK) {
 			startY = 6;
 			factor = -1;
 		}
-
+		
+		moveType = checkEnPassant(board, moveType);
 		// when destination field is empty
-		if (moveType.equals(MoveType.ATTACK)) {
-			return moveConditionsWhenAttack(startY, factor);
+		if (moveType == MoveType.ATTACK) {
+			
+			return moveConditionsWhenAttack(move, startY, factor, board);
+			
 			// when destination field is not empty
-		} else if (moveType.equals(MoveType.CAPTURE)) {
-			return moveConditionsWhenCapture(startY, factor);
+		} else if (moveType == MoveType.CAPTURE) {
+			
+			return moveConditionsWhenCapture(move, startY, factor);
+			
+		} else if (moveType == MoveType.EN_PASSANT) {
+			
+			move.setType(moveType);
+			return moveConditionsWhenCapture(move, startY, factor);
+			
 		}
 
 		return false;
 	}
+
+	
 
 }

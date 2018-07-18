@@ -5,9 +5,10 @@ import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.enums.Color;
 import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
-import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
+import com.capgemini.chess.algorithms.implementation.exceptions.IndexOutOfRangeException;
+import com.capgemini.chess.algorithms.implementation.exceptions.InvalidColorPiece;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
 public class MoveValidator {
@@ -18,9 +19,9 @@ public class MoveValidator {
 	private Piece pieceTo;
 	private Color nextColor;
 	private Board board;
-	
+
 	public MoveValidator(Coordinate from, Coordinate to, Color nextColor) throws InvalidMoveException {
-		
+
 		this.from = from;
 		this.to = to;
 		this.nextColor = nextColor;
@@ -28,27 +29,30 @@ public class MoveValidator {
 	}
 
 	public void setPieces(Piece pieceFrom, Piece pieceTo) {
-		
+
 		this.pieceFrom = pieceFrom;
 		this.pieceTo = pieceTo;
 	}
-	
-	public void setBoard(Board board){
+
+	public void setBoard(Board board) {
 		this.board = board;
 	}
 
-	public Move checkAllValidations() throws InvalidMoveException {
-		
+	public MoveValidator() {
+	}
+
+	public Move checkValidations() throws InvalidMoveException {
+
 		Move move = new Move(from, to);
 		move = validateMovePiece();
 		return move;
 	}
 
 	private boolean validateCoordinate(Coordinate coordinate) {
-		
+
 		int x = coordinate.getX();
 		int y = coordinate.getY();
-		
+
 		if (x >= 0 && x < 8 && y >= 0 && y < 8) {
 			return true;
 		}
@@ -56,10 +60,10 @@ public class MoveValidator {
 		return false;
 	}
 
-	public void validateRangeOfIndex() throws InvalidMoveException {
-		
+	public void validateRangeOfIndex() throws IndexOutOfRangeException {
+
 		if (!(validateCoordinate(from) && validateCoordinate(to))) {
-			throw new InvalidMoveException();
+			throw new IndexOutOfRangeException();
 		}
 
 	}
@@ -67,54 +71,83 @@ public class MoveValidator {
 	public Move validateMovePiece() throws InvalidMoveException {
 
 		MoveType moveType = checkMoveType();
-		
+
 		Move move = new Move(from, to);
-		
+
 		move.setMovedPiece(pieceFrom);
 		move.setFrom(from);
 		move.setTo(to);
 		move.setType(moveType);
-		
-		PiecesMoveFactory factory = new PiecesMoveFactory();
-		
-		if(!factory.checkPath(move, board)){
+
+		PiecesMoveFactory factory = new PiecesMoveFactory(board);
+
+		if (!factory.checkPath(move)) {
 			throw new InvalidMoveException();
 		}
 
 		return move;
 	}
-	
-	public MoveType checkMoveType() throws InvalidMoveException{
-		
-		if(pieceFrom == null){
+
+	public MoveType checkMoveType() throws InvalidColorPiece,InvalidMoveException {
+
+		if (pieceFrom == null) {
 			throw new InvalidMoveException();
 		}
-		
+
 		Color color = pieceFrom.getColor();
-		
-		if(!color.equals(nextColor)){
-			throw new InvalidMoveException(); //nie moja figura
+
+		if (!(color == nextColor)) {
+			throw new InvalidColorPiece("This piece is not yours"); 
 		}
-		
-		if(pieceTo == null){
-			
+
+		if (pieceTo == null) {
+
 			return MoveType.ATTACK;
-			
-		}else{
-			
+
+		} else {
+
 			Color colorFrom = pieceFrom.getColor();
 			Color colorTo = pieceTo.getColor();
-			
-			if(!colorTo.equals(colorFrom)){
+
+			if (!(colorTo  == colorFrom)) {
 				return MoveType.CAPTURE;
 			}
 				
-		}
-		
-		throw new InvalidMoveException();
-		
-	}
-	
 
+		}
+
+		throw new InvalidColorPiece("This piece is yours");
+
+	}
+
+	public Move checkAnyValidMove(Color nextColor) {
+
+		PiecesMoveFactory piecesFactory = new PiecesMoveFactory(board);
+
+		Piece piece;
+		Coordinate coordinateFrom;
+		Move move = new Move();
+
+		for (int x = 0; x < board.SIZE; x++) {
+			for (int y = 0; y < board.SIZE; y++) {
+
+				coordinateFrom = new Coordinate(x, y);
+				piece = board.getPieceAt(coordinateFrom);
+
+				if (piece != null && piece.getColor() == nextColor) {
+					
+					Coordinate coordinateTo = piecesFactory.checkIsAnyMove(piece, coordinateFrom);
+					move.setFrom(coordinateFrom);
+					move.setTo(coordinateTo);
+					move.setMovedPiece(piece);
+					
+					return move;
+
+				}
+			}
+		}
+
+		return move;
+	}
 
 }

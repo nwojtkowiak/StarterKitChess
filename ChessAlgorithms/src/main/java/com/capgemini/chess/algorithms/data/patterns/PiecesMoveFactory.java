@@ -1,6 +1,8 @@
 package com.capgemini.chess.algorithms.data.patterns;
 
+import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
+import com.capgemini.chess.algorithms.data.enums.Color;
 import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.enums.PieceType;
@@ -10,35 +12,71 @@ import com.capgemini.chess.algorithms.piecesValidators.BishopMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.KingMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.KinghtMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.PawnMoveValidator;
+import com.capgemini.chess.algorithms.piecesValidators.PieceMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.QueenMoveValidator;
 import com.capgemini.chess.algorithms.piecesValidators.RookMoveValidator;
 
 public class PiecesMoveFactory {
 
-	public boolean checkPath(Move move, Board board) throws InvalidMoveException {
+	private Board board;
+	
+	public PiecesMoveFactory(Board board){
+		this.board = board;
+	}
+	
+	public boolean checkPath(Move move) {
 		PieceType pieceType = move.getMovedPiece().getType();
-		
-		if (pieceType.equals(PieceType.PAWN)) {
-			return new PawnMoveValidator(move, board).validateMove();
 
-		} else if (pieceType.equals(PieceType.BISHOP)) {
-			return new BishopMoveValidator(move, board).validateMove();
+		if (pieceType == PieceType.PAWN) {
+			return new PawnMoveValidator().validateMove( move, board);
 
-		} else if (pieceType.equals(PieceType.KNIGHT)) {
-			return new KinghtMoveValidator(move).validateMove();
+		} else if (pieceType == PieceType.BISHOP) {
+			return new BishopMoveValidator().validateMove( move, board);
 
-		} else if (pieceType.equals(PieceType.ROOK)) {
-			return new RookMoveValidator(move, board).validateMove();
+		} else if (pieceType == PieceType.KNIGHT) {
+			return new KinghtMoveValidator().validateMove( move, board);
 
-		} else if (pieceType.equals(PieceType.QUEEN)) {
-			return new QueenMoveValidator(move, board).validateMove();
+		} else if (pieceType == PieceType.ROOK) {
+			return new RookMoveValidator().validateMove( move, board);
 
-		} else if (pieceType.equals(PieceType.KING)) {
-			return new KingMoveValidator(move).validateMove();
+		} else if (pieceType == PieceType.QUEEN) {
+			return new QueenMoveValidator().validateMove( move, board);
+
+		} else if (pieceType == PieceType.KING) {
+			return new KingMoveValidator().validateMove( move, board);
 
 		}
 
 		return false;
 
+	}
+
+	public Coordinate checkIsAnyMove(Piece piece, Coordinate coordinate) {
+		
+		//PieceMoveValidator pieceValidator = new PieceMoveValidator();
+		PieceType pieceType = piece.getType();
+		Color color = piece.getColor();
+		
+		if (pieceType == PieceType.PAWN) {
+			return new PawnMoveValidator().findMove(color, coordinate, board);
+
+		} else if (pieceType == PieceType.BISHOP) {
+			return new BishopMoveValidator().findMove(color, coordinate, board);
+ 
+		} else if (pieceType == PieceType.KNIGHT) {
+			return new KinghtMoveValidator().findMove(color, coordinate, board);
+
+		} else if (pieceType == PieceType.ROOK) {
+			return new RookMoveValidator().findMove(color, coordinate, board);
+
+		} else if (pieceType == PieceType.QUEEN) {
+			return new QueenMoveValidator().findMove(color, coordinate, board);
+
+		} else if (pieceType == PieceType.KING) {
+			return new KingMoveValidator().findMove(color, coordinate, board);
+
+		}
+
+		return coordinate;
 	}
 }

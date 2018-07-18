@@ -228,45 +228,43 @@ public class BoardManager {
 	}
 
 	private void addEnPassant(Move move) {
-		Move lastMove = this.board.getMoveHistory().get(this.board.getMoveHistory().size() - 1);
-		this.board.setPieceAt(null, lastMove.getTo());
+		//edited because this do get on empty list
+		int size = this.board.getMoveHistory().size() - 1;
+		if (size > 0) {
+			Move lastMove = this.board.getMoveHistory().get(this.board.getMoveHistory().size() - 1);
+			this.board.setPieceAt(null, lastMove.getTo());
+		}
 	}
 
-	private void setStateBoard(Piece pieceFrom, Coordinate from, Piece pieceTo, Coordinate to){
-		board.setPieceAt(pieceFrom, from);
-		board.setPieceAt(pieceTo, to);
-	}
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
 
 		Color nextColor = calculateNextMoveColor();
 		MoveValidator moveValidator = new MoveValidator(from, to, nextColor);
-		
+
 		Piece pieceFrom = this.board.getPieceAt(from);
 		Piece pieceTo = this.board.getPieceAt(to);
-		
-		
+
 		moveValidator.setPieces(pieceFrom, pieceTo);
 		moveValidator.setBoard(board);
-		
-		Move move = moveValidator.checkAllValidations();
+
+		Move move = moveValidator.checkValidations();
 		boolean resultInCheck = false;
-		
-		if( move != null){
-			setStateBoard(null, from, pieceFrom, to);
-			
+
+		if (move != null) {
+			board.setStateBoard(null, from, pieceFrom, to);
+
 			resultInCheck = isKingInCheck(nextColor);
-			
-			setStateBoard(pieceFrom, from, pieceTo, to);
-				
-			
+
+			board.setStateBoard(pieceFrom, from, pieceTo, to);
+
 		}
-		
-	 	if(resultInCheck){
-	 		throw new KingInCheckException();
-	 	}
-		
+
+		if (resultInCheck) {
+			throw new KingInCheckException();
+		}
+
 		return move;
-		
+
 	}
 
 	private boolean isKingInCheck(Color kingColor) {
@@ -277,9 +275,23 @@ public class BoardManager {
 
 	private boolean isAnyMoveValid(Color nextMoveColor) {
 
-		// TODO please add implementation here
+		MoveValidator moveValidator = new MoveValidator();
+		moveValidator.setBoard(board);
 
-		return false;
+		boolean resultInCheck = false;
+
+		Move move = moveValidator.checkAnyValidMove(nextMoveColor);
+		if (move.getTo() != move.getFrom()) {
+			Piece pieceTo = board.getPieceAt(move.getTo());
+
+			board.setStateBoard(null, move.getFrom(), move.getMovedPiece(), move.getTo());
+
+			resultInCheck = isKingInCheck(nextMoveColor);
+
+			board.setStateBoard(move.getMovedPiece(), move.getFrom(), pieceTo, move.getTo());
+		}
+
+		return !resultInCheck;
 	}
 
 	private Color calculateNextMoveColor() {

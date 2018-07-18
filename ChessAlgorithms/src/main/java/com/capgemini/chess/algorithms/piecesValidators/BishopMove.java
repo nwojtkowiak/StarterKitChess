@@ -4,7 +4,7 @@ import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.generated.Board;
 
 public class BishopMove {
-
+//TODO przeniesc jako parametr Move
 	private int xFrom;
 	private int yFrom;
 	private int xTo;
@@ -41,7 +41,8 @@ public class BishopMove {
 	}
 	
 	public boolean check() {
-		if (Math.abs(xFrom - yFrom) == Math.abs(xTo - yTo)) {
+		//if (Math.abs(xFrom - yFrom) == Math.abs(xTo - yTo)) {
+		if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
 			return true;
 		}
 

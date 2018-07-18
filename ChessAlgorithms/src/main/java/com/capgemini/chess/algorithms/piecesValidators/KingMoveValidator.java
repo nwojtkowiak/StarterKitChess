@@ -9,19 +9,19 @@ import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.pieces.interfaces.MoveValidatorInterface;
 
 public class KingMoveValidator extends PieceMoveValidator {
 
 	private Board board;
 	private Color color;
 
-	public KingMoveValidator(Color color) {
-		this.color = color;
+	public KingMoveValidator() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public KingMoveValidator(Move move) {
-		super(move.getFrom().getX(), move.getFrom().getY(), move.getTo().getX(), move.getTo().getY());
+	public KingMoveValidator(Color color) {
+		this.color = color;
 	}
 
 	public void setBoard(Board board) {
@@ -29,7 +29,13 @@ public class KingMoveValidator extends PieceMoveValidator {
 	}
 
 	@Override
-	public boolean moveConditions() {
+	public boolean moveConditions(Move move, Board board) {
+		
+		int xFrom = move.getFrom().getX();
+		int yFrom = move.getFrom().getY();
+		int xTo = move.getTo().getX();
+		int yTo = move.getTo().getY();
+		
 
 		if ((xTo >= xFrom - 1 && xTo <= xFrom + 1) && (yTo >= yFrom - 1 && yTo <= yFrom + 1)) {
 			return true;
@@ -50,7 +56,7 @@ public class KingMoveValidator extends PieceMoveValidator {
 				if (pieces[x][y] != null) {
 					pieceType = pieces[x][y].getType();
 					color = pieces[x][y].getColor();
-					if (pieceType.equals(PieceType.KING) && color.equals(this.color)) {
+					if (pieceType == PieceType.KING && color == this.color) {
 						coordinate = new Coordinate(x, y);
 					}
 				}
@@ -65,7 +71,7 @@ public class KingMoveValidator extends PieceMoveValidator {
 
 		Coordinate kingCoordinate = whereIs();
 		Coordinate coordinate;
-		PiecesMoveFactory pieceFactory = new PiecesMoveFactory();
+		PiecesMoveFactory pieceFactory = new PiecesMoveFactory(board);
 		Move move = new Move();
 		Piece piece;
 		boolean result = false;
@@ -82,17 +88,13 @@ public class KingMoveValidator extends PieceMoveValidator {
 
 					piece = board.getPieceAt(coordinate);
 
-					if (!piece.getColor().equals(this.color)) {
+					if (!(piece.getColor() == this.color)) {
 
 						move.setFrom(coordinate);
 						move.setMovedPiece(piece);
 
-						try {
-							if (pieceFactory.checkPath(move, board)) {
-								return true;
-							}
-						} catch (InvalidMoveException e) {
-							result = false;
+						if (pieceFactory.checkPath(move)) {
+							return true;
 						}
 					}
 				}
