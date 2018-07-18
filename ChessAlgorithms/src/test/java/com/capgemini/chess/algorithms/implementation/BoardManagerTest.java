@@ -561,7 +561,7 @@ public class BoardManagerTest {
 		assertTrue(exceptionThrown);
 	}
 	
-	//OK
+
 	@Test
 	public void testPerformMoveInvalidOwnPieceCapture() {
 		// given
@@ -665,7 +665,7 @@ public class BoardManagerTest {
 		boolean exceptionThrown = false;
 		try {
 			//bishop moveConditions zwraca false
-			boardManager.performMove(new Coordinate(4, 5), new Coordinate(3, 2));
+			boardManager.performMove(new Coordinate(4, 5), new Coordinate(7, 2));
 		} catch (InvalidMoveException e) {
 			exceptionThrown = e instanceof KingInCheckException;
 		}
@@ -702,7 +702,7 @@ public class BoardManagerTest {
 		assertEquals(BoardState.CHECK, boardState);
 	}
 	
-	//OK
+
 	@Test
 	public void testUpdateBoardStateCheckMate() throws InvalidMoveException {
 		// given

@@ -268,9 +268,8 @@ public class BoardManager {
 	}
 
 	private boolean isKingInCheck(Color kingColor) {
-		KingMoveValidator king = new KingMoveValidator(kingColor);
-		king.setBoard(board);
-		return king.isCheck();
+		KingMoveValidator king = new KingMoveValidator();
+		return king.isCheck(board, kingColor);
 	}
 
 	private boolean isAnyMoveValid(Color nextMoveColor) {

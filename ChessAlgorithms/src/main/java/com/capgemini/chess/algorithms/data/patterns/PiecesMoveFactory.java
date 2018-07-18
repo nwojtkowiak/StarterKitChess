@@ -51,29 +51,28 @@ public class PiecesMoveFactory {
 
 	}
 
-	public Coordinate checkIsAnyMove(Piece piece, Coordinate coordinate) {
+	public Coordinate checkIsAnyMove(Move move, Coordinate coordinate) {
 		
 		//PieceMoveValidator pieceValidator = new PieceMoveValidator();
-		PieceType pieceType = piece.getType();
-		Color color = piece.getColor();
+		PieceType pieceType = move.getMovedPiece().getType();
 		
 		if (pieceType == PieceType.PAWN) {
-			return new PawnMoveValidator().findMove(color, coordinate, board);
+			return new PawnMoveValidator().findMove(move, board);
 
 		} else if (pieceType == PieceType.BISHOP) {
-			return new BishopMoveValidator().findMove(color, coordinate, board);
+			return new BishopMoveValidator().findMove(move, board);
  
 		} else if (pieceType == PieceType.KNIGHT) {
-			return new KinghtMoveValidator().findMove(color, coordinate, board);
+			return new KinghtMoveValidator().findMove(move, board);
 
 		} else if (pieceType == PieceType.ROOK) {
-			return new RookMoveValidator().findMove(color, coordinate, board);
+			return new RookMoveValidator().findMove(move, board);
 
 		} else if (pieceType == PieceType.QUEEN) {
-			return new QueenMoveValidator().findMove(color, coordinate, board);
+			return new QueenMoveValidator().findMove(move, board);
 
 		} else if (pieceType == PieceType.KING) {
-			return new KingMoveValidator().findMove(color, coordinate, board);
+			return new KingMoveValidator().findMove(move, board);
 
 		}
 

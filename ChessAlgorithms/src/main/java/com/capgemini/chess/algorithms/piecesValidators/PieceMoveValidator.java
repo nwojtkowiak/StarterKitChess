@@ -9,32 +9,26 @@ import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.pieces.interfaces.MoveConditioner;
 
 public abstract class PieceMoveValidator implements MoveConditioner {
-
-
-	protected Board board;
-	protected Color color;
-
 		
 	public PieceMoveValidator(){
 		
 	}
 	
-
-
-	
 	@Override
 	public abstract boolean moveConditions(Move move, Board board);
 		
 	
-	public Coordinate findMove(Color color, Coordinate coordinateFrom, Board board){
+	public Coordinate findMove(Move move, Board board){
 		Coordinate coordinateTo = new Coordinate(-1, -1);
 
 		for (int x = 0; x < board.SIZE; x++) {
 			for (int y = 0; y < board.SIZE; y++) {
 				
 				coordinateTo = new Coordinate(x, y);
-				Move move = new Move(coordinateFrom, coordinateTo);
-				if (moveConditions(move, board)) {
+				Move moveToCheck = move;
+				moveToCheck.setTo(coordinateTo);
+				
+				if (moveConditions(moveToCheck, board)) {
 					return coordinateTo;
 				}
 			}

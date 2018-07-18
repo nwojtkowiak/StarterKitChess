@@ -12,22 +12,51 @@ import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveExcep
 
 public class KingMoveValidator extends PieceMoveValidator {
 
-	private Board board;
-	private Color color;
-
 	public KingMoveValidator() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public KingMoveValidator(Color color) {
-		this.color = color;
+	public boolean checkCastling(Move move, Board board){
+		//int sizeHistory = board.getMoveHistory().size();
+		Coordinate from = move.getFrom();
+		Coordinate to = move.getTo();
+		Coordinate coordinateForRook = new Coordinate(from.getX(), from.getY());
+		
+		boolean result = false;
+		
+		for(Move mv : board.getMoveHistory()){
+			if(mv.getMovedPiece().getType() == PieceType.KING || mv.getMovedPiece().getType() == PieceType.ROOK){
+				if(mv.getFrom().equals(from)){
+					return false;
+				}
+			}
+		}
+		
+		RookMove rookMove = new RookMove(from.getX(), to.getY(), to.getX(), to.getY());
+		if(!rookMove.isAllPathFree(board)){
+			return false;
+		}
+		
+		//check if King is checked
+		if(isCheck(from, board, move.getMovedPiece().getColor())){
+			return false;
+		}
+		
+		if(to.getX() == from.getX() - 2){
+			coordinateForRook = new Coordinate(from.getX() - 1, from.getY());
+		}else if (to.getX() == from.getX() + 2){
+			coordinateForRook = new Coordinate(from.getX() + 1, from.getY());
+		}
+		
+		//check if field for Rook is checked
+		if(isCheck(coordinateForRook, board, move.getMovedPiece().getColor())){
+			return false;
+		}
+		
+		move.setType(MoveType.CASTLING);
+		return true;
 	}
-
-	public void setBoard(Board board) {
-		this.board = board;
-	}
-
 	@Override
 	public boolean moveConditions(Move move, Board board) {
 		
@@ -36,7 +65,9 @@ public class KingMoveValidator extends PieceMoveValidator {
 		int xTo = move.getTo().getX();
 		int yTo = move.getTo().getY();
 		
-
+		if( yTo == yFrom && (xTo == xFrom + 2 || xTo == xFrom -2)) {
+			return checkCastling(move, board);
+		}
 		if ((xTo >= xFrom - 1 && xTo <= xFrom + 1) && (yTo >= yFrom - 1 && yTo <= yFrom + 1)) {
 			return true;
 
@@ -44,19 +75,19 @@ public class KingMoveValidator extends PieceMoveValidator {
 		return false;
 	}
 
-	public Coordinate whereIs() {
+	public Coordinate whereIs(Board board, Color kingColor) {
 
 		Piece[][] pieces = board.getPieces();
 		Coordinate coordinate = new Coordinate(0, 0);
 		PieceType pieceType;
-		Color color;
+		Color colorPiece;
 
 		for (int x = 0; x < board.SIZE; x++) {
 			for (int y = 0; y < board.SIZE; y++) {
 				if (pieces[x][y] != null) {
 					pieceType = pieces[x][y].getType();
-					color = pieces[x][y].getColor();
-					if (pieceType == PieceType.KING && color == this.color) {
+					colorPiece = pieces[x][y].getColor();
+					if (pieceType == PieceType.KING && colorPiece == kingColor) {
 						coordinate = new Coordinate(x, y);
 					}
 				}
@@ -67,9 +98,8 @@ public class KingMoveValidator extends PieceMoveValidator {
 
 	}
 
-	public boolean isCheck() {
-
-		Coordinate kingCoordinate = whereIs();
+	public boolean isCheck(Coordinate kingCoordinate, Board board, Color kingColor){
+		
 		Coordinate coordinate;
 		PiecesMoveFactory pieceFactory = new PiecesMoveFactory(board);
 		Move move = new Move();
@@ -88,7 +118,7 @@ public class KingMoveValidator extends PieceMoveValidator {
 
 					piece = board.getPieceAt(coordinate);
 
-					if (!(piece.getColor() == this.color)) {
+					if (!(piece.getColor() == kingColor)) {
 
 						move.setFrom(coordinate);
 						move.setMovedPiece(piece);
@@ -101,6 +131,12 @@ public class KingMoveValidator extends PieceMoveValidator {
 			}
 		}
 		return result;
+	}
+	
+	public boolean isCheck(Board board, Color kingColor) {
+
+		Coordinate kingCoordinate = whereIs(board, kingColor);
+		return isCheck(kingCoordinate,board, kingColor);
 	}
 
 }

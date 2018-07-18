@@ -11,22 +11,9 @@ public class PawnMoveValidator extends PieceMoveValidator {
 
 	private int startY = 1;
 	private int factor = 1;
-	
-	private MoveType moveType;
 
 	public PawnMoveValidator() {
 
-	}
-
-	public void setBoard(Board board){
-		this.board = board;
-	}
-	
-
-	public PawnMoveValidator(Move move, Board board) {
-		// this.moveType = move.getType();
-		this.moveType = move.getType();
-		this.color = move.getMovedPiece().getColor();
 	}
 
 	public boolean isAllPathFree(int xFrom, int yFrom, Board board) {

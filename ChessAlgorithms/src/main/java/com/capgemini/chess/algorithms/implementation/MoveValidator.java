@@ -135,10 +135,11 @@ public class MoveValidator {
 				piece = board.getPieceAt(coordinateFrom);
 
 				if (piece != null && piece.getColor() == nextColor) {
-					
-					Coordinate coordinateTo = piecesFactory.checkIsAnyMove(piece, coordinateFrom);
 					move.setFrom(coordinateFrom);
-					move.setTo(coordinateTo);
+					move.setMovedPiece(piece);
+					
+					Coordinate coordinateTo = piecesFactory.checkIsAnyMove(move, coordinateFrom);
+					
 					move.setMovedPiece(piece);
 					
 					return move;
