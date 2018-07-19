@@ -8,7 +8,6 @@ import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
-import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
 public class KingMoveValidator extends PieceMoveValidator {
 
@@ -88,7 +87,7 @@ public class KingMoveValidator extends PieceMoveValidator {
 					pieceType = pieces[x][y].getType();
 					colorPiece = pieces[x][y].getColor();
 					if (pieceType == PieceType.KING && colorPiece == kingColor) {
-						coordinate = new Coordinate(x, y);
+						return new Coordinate(x, y);
 					}
 				}
 			}

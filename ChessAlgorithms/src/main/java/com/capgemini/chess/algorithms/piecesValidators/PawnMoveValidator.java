@@ -9,14 +9,10 @@ import com.capgemini.chess.algorithms.data.generated.Board;
 
 public class PawnMoveValidator extends PieceMoveValidator {
 
-	private int startY = 1;
-	private int factor = 1;
-
 	public PawnMoveValidator() {
-
 	}
 
-	public boolean isAllPathFree(int xFrom, int yFrom, Board board) {
+	public boolean isAllPathFree(int xFrom, int yFrom, int factor, Board board) {
 
 		Coordinate coordinate = new Coordinate(xFrom + factor, yFrom);
 
@@ -36,7 +32,7 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		if (xFrom == xTo) {
 			if (yFrom == startY) {
 				if (yFrom + 2 * factor == yTo) {
-					return isAllPathFree(xFrom, yFrom, board);
+					return isAllPathFree(xFrom, yFrom, factor, board);
 				} else if (yFrom + 1 * factor == yTo) {
 					return true;
 				}
@@ -50,7 +46,7 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		return false;
 	}
 
-	private MoveType checkEnPassant(Board board, MoveType moveType) {
+	private MoveType checkEnPassant(MoveType moveType, Board board ) {
 		int sizeHistory = board.getMoveHistory().size();
 		Move lastMove;
 				
@@ -96,12 +92,17 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		Color color = move.getMovedPiece().getColor();
 		MoveType moveType = move.getType();
 		
+		//when white
+		int startY = 1;
+		int factor = 1;
+		
+		//when black then change
 		if (color == Color.BLACK) {
 			startY = 6;
 			factor = -1;
 		}
 		
-		moveType = checkEnPassant(board, moveType);
+		moveType = checkEnPassant(moveType, board);
 		// when destination field is empty
 		if (moveType == MoveType.ATTACK) {
 			

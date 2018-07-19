@@ -1,6 +1,5 @@
 package com.capgemini.chess.algorithms.piecesValidators;
 
-import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.generated.Board;
 

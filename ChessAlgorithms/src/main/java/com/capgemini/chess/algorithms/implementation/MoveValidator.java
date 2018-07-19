@@ -17,14 +17,11 @@ public class MoveValidator {
 	private Coordinate to;
 	private Piece pieceFrom;
 	private Piece pieceTo;
-	private Color nextColor;
-	private Board board;
 
-	public MoveValidator(Coordinate from, Coordinate to, Color nextColor) throws InvalidMoveException {
+	public MoveValidator(Coordinate from, Coordinate to) throws InvalidMoveException {
 
 		this.from = from;
 		this.to = to;
-		this.nextColor = nextColor;
 		validateRangeOfIndex();
 	}
 
@@ -34,17 +31,17 @@ public class MoveValidator {
 		this.pieceTo = pieceTo;
 	}
 
-	public void setBoard(Board board) {
-		this.board = board;
-	}
+//	public void setBoard(Board board) {
+//		this.board = board;
+//	}
 
 	public MoveValidator() {
 	}
 
-	public Move checkValidations() throws InvalidMoveException {
+	public Move checkValidations(Color nextColor, Board board) throws InvalidMoveException {
 
 		Move move = new Move(from, to);
-		move = validateMovePiece();
+		move = validateMovePiece(nextColor, board);
 		return move;
 	}
 
@@ -68,9 +65,9 @@ public class MoveValidator {
 
 	}
 
-	public Move validateMovePiece() throws InvalidMoveException {
+	public Move validateMovePiece(Color nextColor,Board board) throws InvalidMoveException {
 
-		MoveType moveType = checkMoveType();
+		MoveType moveType = checkMoveType(nextColor);
 
 		Move move = new Move(from, to);
 
@@ -88,7 +85,7 @@ public class MoveValidator {
 		return move;
 	}
 
-	public MoveType checkMoveType() throws InvalidColorPiece,InvalidMoveException {
+	public MoveType checkMoveType(Color nextColor) throws InvalidColorPiece,InvalidMoveException {
 
 		if (pieceFrom == null) {
 			throw new InvalidMoveException();
@@ -120,7 +117,7 @@ public class MoveValidator {
 
 	}
 
-	public Move checkAnyValidMove(Color nextColor) {
+	public Move checkAnyValidMove(Color nextColor, Board board) {
 
 		PiecesMoveFactory piecesFactory = new PiecesMoveFactory(board);
 
@@ -138,8 +135,8 @@ public class MoveValidator {
 					move.setFrom(coordinateFrom);
 					move.setMovedPiece(piece);
 					
-					Coordinate coordinateTo = piecesFactory.checkIsAnyMove(move, coordinateFrom);
-					
+					Coordinate coordinateTo = piecesFactory.checkIsAnyMove(move);
+					move.setTo(coordinateTo);
 					move.setMovedPiece(piece);
 					
 					return move;

@@ -239,15 +239,14 @@ public class BoardManager {
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
 
 		Color nextColor = calculateNextMoveColor();
-		MoveValidator moveValidator = new MoveValidator(from, to, nextColor);
+		MoveValidator moveValidator = new MoveValidator(from, to);
 
 		Piece pieceFrom = this.board.getPieceAt(from);
 		Piece pieceTo = this.board.getPieceAt(to);
 
 		moveValidator.setPieces(pieceFrom, pieceTo);
-		moveValidator.setBoard(board);
 
-		Move move = moveValidator.checkValidations();
+		Move move = moveValidator.checkValidations(nextColor, this.board);
 		boolean resultInCheck = false;
 
 		if (move != null) {
@@ -275,11 +274,11 @@ public class BoardManager {
 	private boolean isAnyMoveValid(Color nextMoveColor) {
 
 		MoveValidator moveValidator = new MoveValidator();
-		moveValidator.setBoard(board);
+		//moveValidator.setBoard(board);
 
 		boolean resultInCheck = false;
 
-		Move move = moveValidator.checkAnyValidMove(nextMoveColor);
+		Move move = moveValidator.checkAnyValidMove(nextMoveColor, board);
 		if (move.getTo() != move.getFrom()) {
 			Piece pieceTo = board.getPieceAt(move.getTo());
 
