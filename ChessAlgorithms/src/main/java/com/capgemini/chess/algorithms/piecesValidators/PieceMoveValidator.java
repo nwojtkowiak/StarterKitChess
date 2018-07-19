@@ -3,21 +3,17 @@ package com.capgemini.chess.algorithms.piecesValidators;
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.enums.Color;
-import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.MoveValidator;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.implementation.exceptions.NotAnyValidMove;
-import com.capgemini.chess.algorithms.pieces.interfaces.MoveConditioner;
 
-public abstract class PieceMoveValidator implements MoveConditioner {
+public abstract class PieceMoveValidator /* implements MoveConditioner */ {
 
 	public PieceMoveValidator() {
 
 	}
 
-	@Override
 	public abstract boolean moveConditions(Move move, Board board);
 
 	private boolean validateNewMove(Color color, Move move, Piece pieceTo) {
@@ -26,7 +22,7 @@ public abstract class PieceMoveValidator implements MoveConditioner {
 			MoveValidator moveValidator = new MoveValidator(move.getFrom(), move.getTo());
 			moveValidator.setPieceFrom(move.getMovedPiece());
 			moveValidator.setPieceTo(pieceTo);
-			
+
 			move.setType(moveValidator.checkMoveType(color));
 
 		} catch (InvalidMoveException e) {
@@ -48,11 +44,9 @@ public abstract class PieceMoveValidator implements MoveConditioner {
 			Move moveToCheck = new Move(move.getFrom(), coordinateTo);
 			moveToCheck.setMovedPiece(move.getMovedPiece());
 			Piece pieceTo = board.getPieceAt(coordinateTo);
-			
+
 			if (validateNewMove(color, moveToCheck, pieceTo)) {
 				if (moveConditions(moveToCheck, board)) {
-
-					
 
 					board.setStateBoard(null, move.getFrom(), move.getMovedPiece(), coordinateTo);
 

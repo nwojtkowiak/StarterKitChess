@@ -5,7 +5,6 @@ import com.capgemini.chess.algorithms.data.generated.Board;
 
 public class BishopMoveValidator extends PieceMoveValidator {
 
-	
 	public BishopMoveValidator() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -17,16 +16,13 @@ public class BishopMoveValidator extends PieceMoveValidator {
 		int yFrom = move.getFrom().getY();
 		int xTo = move.getTo().getX();
 		int yTo = move.getTo().getY();
-		
-	
+
 		BishopMove bishopMove = new BishopMove(xFrom, yFrom, xTo, yTo);
-		if(bishopMove.check()){
+		if (bishopMove.check()) {
 			return bishopMove.isAllPathFree(board);
 		}
 
 		return false;
 	}
-
-
 
 }

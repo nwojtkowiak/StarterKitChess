@@ -4,7 +4,7 @@ import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.generated.Board;
 
 public class BishopMove {
-	
+
 	private int xFrom;
 	private int yFrom;
 	private int xTo;
@@ -17,31 +17,31 @@ public class BishopMove {
 		this.yTo = yTo;
 	}
 
-	public boolean isAllPathFree(Board board){
-		
+	public boolean isAllPathFree(Board board) {
+
 		Coordinate coordinate;
-		
+
 		int factorX = 1, factorY = 1;
-		if( yTo < yFrom ){
+		if (yTo < yFrom) {
 			factorY = -1;
 		}
-		if( xTo < xFrom){
+		if (xTo < xFrom) {
 			factorX = -1;
 		}
-		
-		for(int x = xFrom + factorX, y = yFrom + factorY; Math.abs(x - xTo) > 0; x += factorX, y+=factorY ){
+
+		for (int x = xFrom + factorX, y = yFrom + factorY; Math.abs(x - xTo) > 0; x += factorX, y += factorY) {
 			coordinate = new Coordinate(x, y);
-			
-			if(board.getPieceAt(coordinate) != null){
+
+			if (board.getPieceAt(coordinate) != null) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean check() {
-		//if (Math.abs(xFrom - yFrom) == Math.abs(xTo - yTo)) {
+		// if (Math.abs(xFrom - yFrom) == Math.abs(xTo - yTo)) {
 		if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
 			return true;
 		}

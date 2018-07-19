@@ -46,7 +46,7 @@ public class RookMove {
 	}
 
 	public boolean check() {
-		
+
 		if ((xFrom == xTo) || (yFrom == yTo)) {
 			return true;
 		}

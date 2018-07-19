@@ -7,10 +7,10 @@ import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
+import com.capgemini.chess.algorithms.implementation.exceptions.EmptyFromFieldException;
 import com.capgemini.chess.algorithms.implementation.exceptions.IndexOutOfRangeException;
-import com.capgemini.chess.algorithms.implementation.exceptions.InvalidColorPiece;
+import com.capgemini.chess.algorithms.implementation.exceptions.InvalidColorPieceException;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.implementation.exceptions.NotAnyValidMove;
 
 public class MoveValidator {
 
@@ -19,6 +19,7 @@ public class MoveValidator {
 	private Piece pieceFrom;
 	private Piece pieceTo;
 
+	
 	public void setFrom(Coordinate from) {
 		this.from = from;
 	}
@@ -91,16 +92,16 @@ public class MoveValidator {
 		return move;
 	}
 
-	public MoveType checkMoveType(Color nextColor) throws InvalidColorPiece, InvalidMoveException {
+	public MoveType checkMoveType(Color nextColor) throws InvalidColorPieceException, EmptyFromFieldException {
 
 		if (pieceFrom == null) {
-			throw new InvalidMoveException();
+			throw new EmptyFromFieldException();
 		}
 
 		Color color = pieceFrom.getColor();
 
 		if (!(color == nextColor)) {
-			throw new InvalidColorPiece("This piece is not yours");
+			throw new InvalidColorPieceException("This piece is not yours");
 		}
 
 		if (pieceTo == null) {
@@ -118,7 +119,7 @@ public class MoveValidator {
 
 		}
 
-		throw new InvalidColorPiece("This piece is yours");
+		throw new InvalidColorPieceException("This piece is yours");
 
 	}
 

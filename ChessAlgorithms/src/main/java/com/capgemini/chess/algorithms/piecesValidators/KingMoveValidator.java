@@ -16,54 +16,55 @@ public class KingMoveValidator extends PieceMoveValidator {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean checkCastling(Move move, Board board){
-		
+	public boolean checkCastling(Move move, Board board) {
+
 		Coordinate from = move.getFrom();
 		Coordinate to = move.getTo();
 		Coordinate coordinateForRook = new Coordinate(from.getX(), from.getY());
-		
-		for(Move mv : board.getMoveHistory()){
-			if(mv.getMovedPiece().getType() == PieceType.KING || mv.getMovedPiece().getType() == PieceType.ROOK){
-				if(mv.getFrom().equals(from)){
+
+		for (Move mv : board.getMoveHistory()) {
+			if (mv.getMovedPiece().getType() == PieceType.KING || mv.getMovedPiece().getType() == PieceType.ROOK) {
+				if (mv.getFrom().equals(from)) {
 					return false;
 				}
 			}
 		}
-		
+
 		RookMove rookMove = new RookMove(from.getX(), to.getY(), to.getX(), to.getY());
-		if(!rookMove.isAllPathFree(board)){
+		if (!rookMove.isAllPathFree(board)) {
 			return false;
 		}
-		
-		//check if King is checked
-		if(isCheck(from, board, move.getMovedPiece().getColor())){
+
+		// check if King is checked
+		if (isCheck(from, board, move.getMovedPiece().getColor())) {
 			return false;
 		}
-		
-		if(to.getX() == from.getX() - 2){
+
+		if (to.getX() == from.getX() - 2) {
 			coordinateForRook = new Coordinate(from.getX() - 1, from.getY());
-		}else if (to.getX() == from.getX() + 2){
+		} else if (to.getX() == from.getX() + 2) {
 			coordinateForRook = new Coordinate(from.getX() + 1, from.getY());
 		}
-		
-		//check if field for Rook is checked
-		if(isCheck(coordinateForRook, board, move.getMovedPiece().getColor())){
+
+		// check if field for Rook is checked
+		if (isCheck(coordinateForRook, board, move.getMovedPiece().getColor())) {
 			return false;
 		}
-		
+
 		move.setType(MoveType.CASTLING);
-		
+
 		return true;
 	}
+
 	@Override
 	public boolean moveConditions(Move move, Board board) {
-		
+
 		int xFrom = move.getFrom().getX();
 		int yFrom = move.getFrom().getY();
 		int xTo = move.getTo().getX();
 		int yTo = move.getTo().getY();
-		
-		if( yTo == yFrom && (xTo == xFrom + 2 || xTo == xFrom -2)) {
+
+		if (yTo == yFrom && (xTo == xFrom + 2 || xTo == xFrom - 2)) {
 			return checkCastling(move, board);
 		}
 		if ((xTo >= xFrom - 1 && xTo <= xFrom + 1) && (yTo >= yFrom - 1 && yTo <= yFrom + 1)) {
@@ -96,8 +97,8 @@ public class KingMoveValidator extends PieceMoveValidator {
 
 	}
 
-	public boolean isCheck(Coordinate kingCoordinate, Board board, Color kingColor){
-		
+	public boolean isCheck(Coordinate kingCoordinate, Board board, Color kingColor) {
+
 		Coordinate coordinate;
 		PiecesMoveFactory pieceFactory = new PiecesMoveFactory(board);
 		Move move = new Move();
@@ -130,11 +131,11 @@ public class KingMoveValidator extends PieceMoveValidator {
 		}
 		return result;
 	}
-	
+
 	public boolean isCheck(Board board, Color kingColor) {
 
 		Coordinate kingCoordinate = whereIs(board, kingColor);
-		return isCheck(kingCoordinate,board, kingColor);
+		return isCheck(kingCoordinate, board, kingColor);
 	}
 
 }

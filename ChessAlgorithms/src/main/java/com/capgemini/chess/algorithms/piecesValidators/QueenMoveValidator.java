@@ -1,9 +1,6 @@
 package com.capgemini.chess.algorithms.piecesValidators;
 
-import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
-import com.capgemini.chess.algorithms.data.enums.Color;
-import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
 
 public class QueenMoveValidator extends PieceMoveValidator {
@@ -12,15 +9,15 @@ public class QueenMoveValidator extends PieceMoveValidator {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public boolean moveConditions(Move move, Board board) {
-		
+
 		int xFrom = move.getFrom().getX();
 		int yFrom = move.getFrom().getY();
 		int xTo = move.getTo().getX();
 		int yTo = move.getTo().getY();
-		
+
 		// move as Rook
 		RookMove rookMove = new RookMove(xFrom, yFrom, xTo, yTo);
 		if (rookMove.check()) {
@@ -35,8 +32,5 @@ public class QueenMoveValidator extends PieceMoveValidator {
 
 		return false;
 	}
-
-
-
 
 }
