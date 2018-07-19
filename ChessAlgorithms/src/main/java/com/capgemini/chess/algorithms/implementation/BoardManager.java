@@ -246,7 +246,7 @@ public class BoardManager {
 
 		moveValidator.setPieces(pieceFrom, pieceTo);
 
-		Move move = moveValidator.checkValidations(nextColor, this.board);
+		Move move = moveValidator.validateMovePiece(nextColor, this.board);
 		boolean resultInCheck = false;
 
 		if (move != null) {
@@ -274,7 +274,6 @@ public class BoardManager {
 	private boolean isAnyMoveValid(Color nextMoveColor) {
 
 		MoveValidator moveValidator = new MoveValidator();
-		//boolean resultInCheck = false;
 		
 		Move move = moveValidator.checkAnyValidMove(nextMoveColor, board);
 		if (move.getTo() != null) {

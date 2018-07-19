@@ -19,6 +19,22 @@ public class MoveValidator {
 	private Piece pieceFrom;
 	private Piece pieceTo;
 
+	public void setFrom(Coordinate from) {
+		this.from = from;
+	}
+
+	public void setTo(Coordinate to) {
+		this.to = to;
+	}
+
+	public void setPieceFrom(Piece pieceFrom) {
+		this.pieceFrom = pieceFrom;
+	}
+
+	public void setPieceTo(Piece pieceTo) {
+		this.pieceTo = pieceTo;
+	}
+	
 	public MoveValidator(Coordinate from, Coordinate to) throws InvalidMoveException {
 
 		this.from = from;
@@ -32,15 +48,7 @@ public class MoveValidator {
 		this.pieceTo = pieceTo;
 	}
 
-	// public void setBoard(Board board) {
-	// this.board = board;
-	// }
-
 	public MoveValidator() {
-	}
-
-	public Move checkValidations(Color nextColor, Board board) throws InvalidMoveException {
-		return validateMovePiece(nextColor, board);
 	}
 
 	private boolean validateCoordinate(Coordinate coordinate) {
@@ -114,6 +122,7 @@ public class MoveValidator {
 
 	}
 
+	//search piece from nextColor
 	public Move checkAnyValidMove(Color nextColor, Board board) {
 
 		PiecesMoveFactory piecesFactory = new PiecesMoveFactory(board);

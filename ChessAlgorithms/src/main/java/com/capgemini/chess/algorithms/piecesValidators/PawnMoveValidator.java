@@ -17,7 +17,7 @@ public class PawnMoveValidator extends PieceMoveValidator {
 
 		Coordinate coordinate = new Coordinate(xFrom, yFrom + factor);
 		Piece piece = board.getPieceAt(coordinate);
-		
+
 		if (piece != null) {
 			return false;
 		}
@@ -30,7 +30,7 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		int yFrom = move.getFrom().getY();
 		int xTo = move.getTo().getX();
 		int yTo = move.getTo().getY();
-		
+
 		if (xFrom == xTo) {
 			if (yFrom == startY) {
 				if (yFrom + 2 * factor == yTo) {
@@ -48,10 +48,10 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		return false;
 	}
 
-	private MoveType checkEnPassant(MoveType moveType, Board board ) {
+	private MoveType checkEnPassant(MoveType moveType, Board board) {
 		int sizeHistory = board.getMoveHistory().size();
 		Move lastMove;
-				
+
 		if (sizeHistory > 0) {
 			lastMove = board.getMoveHistory().get(sizeHistory - 1);
 		} else {
@@ -69,10 +69,11 @@ public class PawnMoveValidator extends PieceMoveValidator {
 		}
 
 		return moveType;
+
 	}
 
 	private boolean moveConditionsWhenCapture(Move move, int startY, int factor) {
-		
+
 		int xFrom = move.getFrom().getX();
 		int yFrom = move.getFrom().getY();
 		int xTo = move.getTo().getX();
@@ -93,38 +94,38 @@ public class PawnMoveValidator extends PieceMoveValidator {
 	public boolean moveConditions(Move move, Board board) {
 		Color color = move.getMovedPiece().getColor();
 		MoveType moveType = move.getType();
-		
-		//when white
+
+		// when white
 		int startY = 1;
 		int factor = 1;
-		
-		//when black then change
+
+		// when black then change
 		if (color == Color.BLACK) {
 			startY = 6;
 			factor = -1;
 		}
-		
+
 		moveType = checkEnPassant(moveType, board);
 		// when destination field is empty
 		if (moveType == MoveType.ATTACK) {
-			
+
 			return moveConditionsWhenAttack(move, startY, factor, board);
-			
+
 			// when destination field is not empty
 		} else if (moveType == MoveType.CAPTURE) {
-			
+
 			return moveConditionsWhenCapture(move, startY, factor);
-			
+
 		} else if (moveType == MoveType.EN_PASSANT) {
-			
-			move.setType(moveType);
-			return moveConditionsWhenCapture(move, startY, factor);
-			
+			if (moveConditionsWhenCapture(move, startY, factor)) {
+				move.setType(moveType);
+				return true;
+			}
+			return moveConditionsWhenAttack(move, startY, factor, board);
+
 		}
 
 		return false;
 	}
-
-	
 
 }
