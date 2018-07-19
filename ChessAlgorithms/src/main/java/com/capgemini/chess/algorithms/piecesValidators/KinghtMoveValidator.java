@@ -8,11 +8,9 @@ public class KinghtMoveValidator extends PieceMoveValidator{
 
 	public KinghtMoveValidator() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	
-	//TODO zmienic aby nie mialo board w parametrze
+
 	@Override
 	public boolean moveConditions(Move move, Board board) {
 		

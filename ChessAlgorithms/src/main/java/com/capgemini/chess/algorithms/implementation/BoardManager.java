@@ -274,22 +274,14 @@ public class BoardManager {
 	private boolean isAnyMoveValid(Color nextMoveColor) {
 
 		MoveValidator moveValidator = new MoveValidator();
-		//moveValidator.setBoard(board);
-
-		boolean resultInCheck = false;
-
+		//boolean resultInCheck = false;
+		
 		Move move = moveValidator.checkAnyValidMove(nextMoveColor, board);
-		if (move.getTo() != move.getFrom()) {
-			Piece pieceTo = board.getPieceAt(move.getTo());
-
-			board.setStateBoard(null, move.getFrom(), move.getMovedPiece(), move.getTo());
-
-			resultInCheck = isKingInCheck(nextMoveColor);
-
-			board.setStateBoard(move.getMovedPiece(), move.getFrom(), pieceTo, move.getTo());
+		if (move.getTo() != null) {
+			return true;
 		}
 
-		return !resultInCheck;
+		return false;
 	}
 
 	private Color calculateNextMoveColor() {

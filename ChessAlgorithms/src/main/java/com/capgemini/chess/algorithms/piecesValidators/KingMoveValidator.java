@@ -17,12 +17,10 @@ public class KingMoveValidator extends PieceMoveValidator {
 	}
 
 	public boolean checkCastling(Move move, Board board){
-		//int sizeHistory = board.getMoveHistory().size();
+		
 		Coordinate from = move.getFrom();
 		Coordinate to = move.getTo();
 		Coordinate coordinateForRook = new Coordinate(from.getX(), from.getY());
-		
-		boolean result = false;
 		
 		for(Move mv : board.getMoveHistory()){
 			if(mv.getMovedPiece().getType() == PieceType.KING || mv.getMovedPiece().getType() == PieceType.ROOK){
@@ -54,6 +52,7 @@ public class KingMoveValidator extends PieceMoveValidator {
 		}
 		
 		move.setType(MoveType.CASTLING);
+		
 		return true;
 	}
 	@Override

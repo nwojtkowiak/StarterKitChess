@@ -10,6 +10,7 @@ import com.capgemini.chess.algorithms.data.patterns.PiecesMoveFactory;
 import com.capgemini.chess.algorithms.implementation.exceptions.IndexOutOfRangeException;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidColorPiece;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
+import com.capgemini.chess.algorithms.implementation.exceptions.NotAnyValidMove;
 
 public class MoveValidator {
 
@@ -31,18 +32,15 @@ public class MoveValidator {
 		this.pieceTo = pieceTo;
 	}
 
-//	public void setBoard(Board board) {
-//		this.board = board;
-//	}
+	// public void setBoard(Board board) {
+	// this.board = board;
+	// }
 
 	public MoveValidator() {
 	}
 
 	public Move checkValidations(Color nextColor, Board board) throws InvalidMoveException {
-
-		Move move = new Move(from, to);
-		move = validateMovePiece(nextColor, board);
-		return move;
+		return validateMovePiece(nextColor, board);
 	}
 
 	private boolean validateCoordinate(Coordinate coordinate) {
@@ -65,7 +63,7 @@ public class MoveValidator {
 
 	}
 
-	public Move validateMovePiece(Color nextColor,Board board) throws InvalidMoveException {
+	public Move validateMovePiece(Color nextColor, Board board) throws InvalidMoveException {
 
 		MoveType moveType = checkMoveType(nextColor);
 
@@ -85,7 +83,7 @@ public class MoveValidator {
 		return move;
 	}
 
-	public MoveType checkMoveType(Color nextColor) throws InvalidColorPiece,InvalidMoveException {
+	public MoveType checkMoveType(Color nextColor) throws InvalidColorPiece, InvalidMoveException {
 
 		if (pieceFrom == null) {
 			throw new InvalidMoveException();
@@ -94,7 +92,7 @@ public class MoveValidator {
 		Color color = pieceFrom.getColor();
 
 		if (!(color == nextColor)) {
-			throw new InvalidColorPiece("This piece is not yours"); 
+			throw new InvalidColorPiece("This piece is not yours");
 		}
 
 		if (pieceTo == null) {
@@ -106,10 +104,9 @@ public class MoveValidator {
 			Color colorFrom = pieceFrom.getColor();
 			Color colorTo = pieceTo.getColor();
 
-			if (!(colorTo  == colorFrom)) {
+			if (!(colorTo == colorFrom)) {
 				return MoveType.CAPTURE;
 			}
-				
 
 		}
 
@@ -134,12 +131,15 @@ public class MoveValidator {
 				if (piece != null && piece.getColor() == nextColor) {
 					move.setFrom(coordinateFrom);
 					move.setMovedPiece(piece);
-					
+
 					Coordinate coordinateTo = piecesFactory.checkIsAnyMove(move);
-					move.setTo(coordinateTo);
-					move.setMovedPiece(piece);
 					
-					return move;
+					if (!coordinateFrom.equals(coordinateTo)) {
+						move.setTo(coordinateTo);
+						move.setMovedPiece(piece);
+
+						return move;
+					}
 
 				}
 			}

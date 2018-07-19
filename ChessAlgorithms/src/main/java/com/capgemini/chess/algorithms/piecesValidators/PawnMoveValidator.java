@@ -4,6 +4,7 @@ import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.enums.Color;
 import com.capgemini.chess.algorithms.data.enums.MoveType;
+import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 
@@ -14,9 +15,10 @@ public class PawnMoveValidator extends PieceMoveValidator {
 
 	public boolean isAllPathFree(int xFrom, int yFrom, int factor, Board board) {
 
-		Coordinate coordinate = new Coordinate(xFrom + factor, yFrom);
-
-		if (board.getPieceAt(coordinate) != null) {
+		Coordinate coordinate = new Coordinate(xFrom, yFrom + factor);
+		Piece piece = board.getPieceAt(coordinate);
+		
+		if (piece != null) {
 			return false;
 		}
 

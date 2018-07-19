@@ -4,7 +4,7 @@ import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.generated.Board;
 
 public class BishopMove {
-//TODO przeniesc jako parametr Move
+	
 	private int xFrom;
 	private int yFrom;
 	private int xTo;
